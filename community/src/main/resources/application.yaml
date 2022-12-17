@@ -1,0 +1,112 @@
+spring:
+  # 数据源配置 DataSourceProperties
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: password
+  # MailProperties
+  # 新浪：smtp.sina.com
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 583821570@qq.com
+    password: pjhoykxmxrylbcif #授权码
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  thymeleaf:
+    cache: false
+    #redis
+  redis:
+    #服务器地址
+    host: 120.24.99.181
+    #端口
+    port: 6379
+    password: Redis583821570
+    database: 11
+  #kafkaProperties
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: community-consumer-group #在kafka安装文件的config下的consumer.properties中有
+      enable-auto-commit: true #是否自动提交消费者的偏移量，消费者通过偏移量来读取数据的，这里配置的是读取后是否记录下偏移量
+      auto-commit-interval: 3000
+
+  # ElasticsearchProperties
+  data:
+    elasticsearch:
+      cluster-name: community
+      cluster-nodes: localhost:9300
+
+  # TaskExecutionProperties
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 15
+        queue-capacity: 100
+  # TaskSchedulingProperties
+    scheduling:
+      pool:
+        size: 5
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            isClustered: true
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
+    scheduler-name: communityScheduler
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /community
+
+# MybatisProperties
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.chen.community.entity  #存放实体类的包名
+  configuration:
+    use-generated-keys: true  #自动生成主键id
+    map-underscore-to-camel-case: true #驼峰命名 将数据库中的header_url 匹配成 自己类中的headerUrl
+
+# 配置sql调试
+logging:
+  level:
+    com.chen.community: debug
+
+# community
+community:
+  path:
+    domain: http://localhost:8080
+    upload: d:/项目/nowcoder/my/image
+
+
+#caffeine
+caffeine:
+  posts:
+    maxSize: 15  #最大缓存15个数据
+    expired-seconds: 180 #过期时间：3分钟
+
+canal:
+  destination: canaltest
+  server: 127.0.0.1:11111
+
+
+
+
+
+
